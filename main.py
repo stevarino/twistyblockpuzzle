@@ -22,7 +22,7 @@ class Step:
     # already filled block?
 
     piece_len = pieces[self.index]
-    final_pos = [self.pos[i] + (self.direction[i] * piece_len) for i in range(3)]
+    final_pos = tuple(self.pos[i] + (self.direction[i] * piece_len) for i in range(3))
     
     # the only values should be 0,1,2
     if not all(0 <= val <= 2 for val in final_pos):
@@ -39,6 +39,9 @@ class Step:
     
     # And if we made it this far, we know now that the Step is valid
 
+    # sanity check that we're where we should be
+    assert final_pos == self.pos
+
     # Next we need to find the four directions we can turn
     next_steps = []
     for i in range(len(self.direction)):
@@ -53,3 +56,4 @@ class Step:
         )
 
     return next_steps
+
