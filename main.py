@@ -1,3 +1,46 @@
+"""
+Twisty Block Puzzle Solver
+
+So I have this block puzzle toy that I got for Christmas which I pulled apart and
+never could put back together: https://i.imgur.com/qXTnaJF.jpeg
+
+It's a string of cubes, some are in line with each other but others bend at right
+angles. The idea is that it should fold together into a 3x3x3 cube. I've tried to
+reassemble it for hours but I guess I'm not smart enough? Python to the rescue!!!
+
+First step is to lay it out flat so we can see its shape, allowing us to count all
+the lengths of each "elbow": https://i.imgur.com/FZmZupl.jpeg
+
+So we can see that (reading fro the left) it goes up 3, then right 1, then up 1, 
+right 2, etc. The actual directions don't matter, just that there's a turn after
+"n" blocks (n being some number). This allows us to "map" the toy into a data
+structure: [3,1,1,2,1,2,1,1,2,2,1,1,1,2,2,2,2]
+
+Next thing to realize is that each bend in the toy has four options. For instance,
+that first bend can either go left, right, up, or down. Every bend opens up four
+possible solutions, and after all 16 bends we end up with about 4.3 BILLION
+possibilities. However, not all soultions are valid, as in the real world two blocks
+cannot occupy the same unit of space and we know the final solution will have all
+blocks in a 3x3x3 area.
+
+So imagine a tree with four branches at each split. By figuring out which branch is
+illegal (impossible or outside the 3x3x3 area) we prune them before exploring them
+fully. Then we continue searching through the branch possibilities that look valid.
+
+Turns out there are 8 total solutions for this puzzle, and by eliminating the invalid
+steps as early as possible we end up with 845 possibilities that we need to explore.
+
+The final output of this program simply displays the directions I need to snake the
+blocks for each leg. I chose to use "X Y x Z Y z X Z y x Y z Y Z y X Y X" with capital
+letters representing positive direction and lowercase negative direction (X=right,
+x=left, Y=up, y=down, Z=back, z=forward). Thus the program outputs a "human program"
+for me to follow and get what I want.
+
+Final solution: https://i.imgur.com/nVxnx3n.jpeg TADA!
+
+(Used)
+"""
+
 pieces = [3,1,1,2,1,2,1,1,2,2,1,1,1,2,2,2,2]
 
 assert sum(pieces) == (3 * 3 * 3)  # Double check that we have enough to make a cube
@@ -78,14 +121,11 @@ class Step:
         direction = name
     return prev_directions + direction
 
-def main(breadth_first=True):
+def main():
   steps = [Step()]
   total_steps = 0
-  # which end of the steps to pop from? 0 = beginning and breadth first, -1 is end
-  # and therefore depth first
-  pop_index = 0 if breadth_first else -1
   while steps:
-    step = steps.pop(pop_index)
+    step = steps.pop()
     if step.index == len(pieces):
       print(total_steps, ':', step)
     else:
@@ -94,7 +134,4 @@ def main(breadth_first=True):
   print("Examined {} steps".format(total_steps))
 
 if __name__ == '__main__':
-  print("Breadth first search:")
-  main(breadth_first=True)
-  print("\nDepth first search:")
-  main(breadth_first=False)
+  main()
