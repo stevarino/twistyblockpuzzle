@@ -3,7 +3,7 @@ assert sum(pieces) == (3 * 3 * 3)
 
 class Step:
   """A "step" in solving the puzzle, spawning subsequent child steps"""
-  def __init__(self, index, pos, direction, fill_state):
+  def __init__(self, index, pos, direction, fill_state, prev_step):
     # index - what piece we're on (0 is the first piece...)
     self.index = index
 
@@ -15,6 +15,9 @@ class Step:
 
     # fill_state - what blocks in the cube are already filled? A {[coords] => bool} mapping
     self.fill_state = fill_state
+
+    # prev_step - a reference to the step that spawned this step
+    self.prev_step = prev_step
 
   def next(self):
     """Returns the four next logical steps, or zero steps if currently illegal"""
@@ -56,4 +59,3 @@ class Step:
         )
 
     return next_steps
-
