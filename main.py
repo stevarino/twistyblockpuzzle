@@ -125,9 +125,9 @@ def main():
   steps = [Step()]
   total_steps = 0
   while steps:
-    step = steps.pop()
+    step = steps.pop(0)
     if step.index == len(pieces):
-      print(total_steps, ':', step)
+      print(step)
     else:
       steps.extend(step.next())
     total_steps += 1
