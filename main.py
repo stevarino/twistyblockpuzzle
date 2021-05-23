@@ -10,7 +10,7 @@ class Step:
     # pos - position, where is the "head" of the snake (x, y, z)
     self.pos = pos or (0, 0, 0)
 
-    # direction - which way are we going? (1,0,0) is positive x
+    # direction - which way are we going? (1,0,0) is pos x, (0,-1,0) is neg y
     self.direction = direction or (1, 0, 0)
 
     # fill_state - what blocks in the cube are already filled? A {[coords] => bool} mapping
@@ -59,3 +59,13 @@ class Step:
         )
 
     return next_steps
+
+def main():
+  steps = [Step()]
+  while steps:
+    step = steps.pop(0)
+    if step.index == len(pieces):
+      print(step)
+    else:
+      steps.extend(step.next())
+    print(len(steps))
