@@ -60,6 +60,21 @@ class Step:
 
     return next_steps
 
+  def __str__(self):
+    """Returns string rep of directions (capital X is pos x, lowercase x is neg x)"""
+    prev_directions = ""
+    if self.prev_step:
+      prev_directions = str(self.prev_step)
+    direction = '?'
+    for scale, name in zip(self.directions, 'xyz'):
+      if scale == 0:
+        continue
+      if scale == 1:
+        direction = name.upper()
+      else:
+        direction = name
+    return prev_directions + direction
+
 def main():
   steps = [Step()]
   while steps:
