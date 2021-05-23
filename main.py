@@ -39,3 +39,17 @@ class Step:
     
     # And if we made it this far, we know now that the Step is valid
 
+    # Next we need to find the four directions we can turn
+    next_steps = []
+    for i in range(len(self.direction)):
+      # if we're moving in this direction (pos or neg), we can't turn that way
+      if self.direction[i] != 0:
+        continue
+      for posneg in [1, -1]:
+        direction = [0, 0, 0]
+        direction[i] = posneg
+        next_steps.append(
+          Step(self.index+1, final_pos, direction, self.fill_state.copy())
+        )
+
+    return next_steps
