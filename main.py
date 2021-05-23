@@ -3,18 +3,18 @@ assert sum(pieces) == (3 * 3 * 3)
 
 class Step:
   """A "step" in solving the puzzle, spawning subsequent child steps"""
-  def __init__(self, index, pos, direction, fill_state, prev_step):
+  def __init__(self, index=0, pos=None, direction=None, fill_state=None, prev_step=None):
     # index - what piece we're on (0 is the first piece...)
     self.index = index
 
     # pos - position, where is the "head" of the snake (x, y, z)
-    self.pos = pos
+    self.pos = pos or (0, 0, 0)
 
     # direction - which way are we going? (1,0,0) is positive x
-    self.direction = direction
+    self.direction = direction or (1, 0, 0)
 
     # fill_state - what blocks in the cube are already filled? A {[coords] => bool} mapping
-    self.fill_state = fill_state
+    self.fill_state = fill_state or {}
 
     # prev_step - a reference to the step that spawned this step
     self.prev_step = prev_step
@@ -55,7 +55,7 @@ class Step:
         direction = [0, 0, 0]
         direction[i] = posneg
         next_steps.append(
-          Step(self.index+1, final_pos, direction, self.fill_state.copy())
+          Step(self.index+1, final_pos, direction, self.fill_state.copy(), self)
         )
 
     return next_steps
