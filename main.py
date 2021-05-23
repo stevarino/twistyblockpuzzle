@@ -78,17 +78,23 @@ class Step:
         direction = name
     return prev_directions + direction
 
-def main():
+def main(breadth_first=True):
   steps = [Step()]
   total_steps = 0
+  # which end of the steps to pop from? 0 = beginning and breadth first, -1 is end
+  # and therefore depth first
+  pop_index = 0 if breadth_first else -1
   while steps:
-    step = steps.pop(0)
+    step = steps.pop(pop_index)
     if step.index == len(pieces):
-      print(step)
+      print(total_steps, ':', step)
     else:
       steps.extend(step.next())
     total_steps += 1
   print("Examined {} steps".format(total_steps))
 
 if __name__ == '__main__':
-  main()
+  print("Breadth first search:")
+  main(breadth_first=True)
+  print("\nDepth first search:")
+  main(breadth_first=False)
