@@ -1,5 +1,6 @@
 pieces = [3,1,1,2,1,2,1,1,2,2,1,1,1,2,2,2,2]
-assert sum(pieces) == (3 * 3 * 3)
+
+assert sum(pieces) == (3 * 3 * 3)  # Double check that we have enough to make a cube
 
 class Step:
   """A "step" in solving the puzzle, spawning subsequent child steps"""
@@ -8,7 +9,9 @@ class Step:
     self.index = index
 
     # pos - position, where is the "head" of the snake (x, y, z)
-    self.pos = pos or (0, 0, 0)
+    # NOTE: starting at -1 x as we are going to be placing the first block
+    # in the (x) direction.
+    self.pos = pos or (-1, 0, 0)
 
     # direction - which way are we going? (1,0,0) is pos x, (0,-1,0) is neg y
     self.direction = direction or (1, 0, 0)
@@ -32,7 +35,7 @@ class Step:
       return []
     
     # next, lets update fill_state, checking that its not already filled
-    for i in piece_len:
+    for i in range(piece_len):
       self.pos = tuple(self.pos[i] + self.direction[i] for i in range(3))
       # check that the currnt value is 0
       if self.fill_state.get(self.pos):
@@ -64,9 +67,9 @@ class Step:
     """Returns string rep of directions (capital X is pos x, lowercase x is neg x)"""
     prev_directions = ""
     if self.prev_step:
-      prev_directions = str(self.prev_step)
+      prev_directions = str(self.prev_step) + ' '
     direction = '?'
-    for scale, name in zip(self.directions, 'xyz'):
+    for scale, name in zip(self.direction, 'xyz'):
       if scale == 0:
         continue
       if scale == 1:
@@ -77,10 +80,15 @@ class Step:
 
 def main():
   steps = [Step()]
+  total_steps = 0
   while steps:
     step = steps.pop(0)
     if step.index == len(pieces):
       print(step)
     else:
       steps.extend(step.next())
-    print(len(steps))
+    total_steps += 1
+  print("Examined {} steps".format(total_steps))
+
+if __name__ == '__main__':
+  main()
